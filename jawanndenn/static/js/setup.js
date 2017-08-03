@@ -17,17 +17,13 @@ $.each( _REPLACEMENTS_IN_ORDER, function(_, row) {
     _CLOSING_OF[prefix] = closing;
 });
 
-var exampleOptions = ['Apple', 'Banana', 'Orange', 'Papaya'];
-
 var exampleVotesCache = {};
 
-var createExampleVotes = function(options) {
-    var examplePeople = ['Joe', 'Lisa', 'Monica', 'Astrid'];
-
+var createExampleVotes = function(config) {
     var exampleVotes = [];
-    $.each( examplePeople, function( i, person ) {
+    $.each( config.people, function( i, person ) {
         var votes = [];
-        $.each( options, function() {
+        $.each( config.options, function() {
             votes.push( Math.random() > 0.5 );
         });
         exampleVotes.push( [person, votes] );
@@ -35,12 +31,13 @@ var createExampleVotes = function(options) {
     return exampleVotes;
 };
 
-var getExampleVotesCached = function(options) {
-    if (options.length in exampleVotesCache) {
-        return exampleVotesCache[options.length];
+var getExampleVotesCached = function(config) {
+    var key = config.options.length + "-" + config.people.length;
+    if (key in exampleVotesCache) {
+        return exampleVotesCache[key];
     } else {
-        var exampleVotes = createExampleVotes(options);
-        exampleVotesCache[options.length] = exampleVotes;
+        var exampleVotes = createExampleVotes(config);
+        exampleVotesCache[key] = exampleVotes;
         return exampleVotes;
     }
 }
@@ -48,7 +45,7 @@ var getExampleVotesCached = function(options) {
 var exampleConfigJson = JSON.stringify( {
         equal_width: false,
         title: 'Which fruit do *you* like?',
-        options: exampleOptions
+        options: ['Apple', 'Banana', 'Orange', 'Papaya']
         }, null, '  ' );
 
 var resetConfig = function() {
@@ -145,7 +142,7 @@ var sync = function() {
 
             var poll = $( "#poll" );
             poll.html( createPollHtml( config,
-                    getExampleVotesCached( config.options ),
+                    getExampleVotesCached( config ),
                     Mode.PREVIEW ) );
 
             if (config.equal_width) {
