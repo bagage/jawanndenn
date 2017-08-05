@@ -23,7 +23,6 @@ STATIC_HOME_LOCAL = os.path.abspath(os.path.normpath(
     pkg_resources.resource_filename(APP_NAME, 'static')
 ))
 _STATIC_HOME_REMOTE = '/static'
-
 db = PollDatabase()
 
 
@@ -48,11 +47,24 @@ def _index():
     return bottle.static_file('html/setup.xhtml', root=STATIC_HOME_LOCAL)
 
 
+@bottle.get('/list')
+def _list():
+    bottle.response.content_type = 'application/xhtml+xml'
+    return bottle.static_file('html/list.xhtml', root=STATIC_HOME_LOCAL)
+
+
 @bottle.post('/create')
 def _create():
     config = json.loads(bottle.request.forms['config'])
     poll_id = db.add(config)
     bottle.redirect('/poll/%s' % poll_id)
+
+
+@bottle.get('/polls')
+def _polls():
+    return _to_json({
+        'polls': db.get_summaries()
+    })
 
 
 @bottle.get('/poll/<poll_id>')

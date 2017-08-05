@@ -146,6 +146,11 @@ var _addSummaryRow = function(table, options, votesPerOption) {
     tr.child( tag('td') );
 };
 
+var formattedDate = function(from_date) {
+    var date = new Date(from_date);
+    return date.toLocaleDateString(date.getTimezoneOffset(), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } );
+}
+
 var createPollHtml = function(config, votes, previewMode) {
     var div = tag('div', {
                 class: 'card-panel'
@@ -156,11 +161,9 @@ var createPollHtml = function(config, votes, previewMode) {
     div.child( tag('h6', {
                 class: 'question'
             }) ).child( config.description );
-    var date = new Date(config.limit_date);
-    var formattedDate = date.toLocaleDateString(date.getTimezoneOffset(), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } );
     div.child( tag('p', {
                 class: 'question'
-            }) ).child( "Date limite d'inscription : " + formattedDate);
+            }) ).child( "Date limite d'inscription : " + formattedDate(config.limit_date));
 
     var form = div.child( tag('form', {
                 id: 'pollForm',

@@ -152,6 +152,17 @@ class PollDatabase(object):
         with self._db_lock:
             return self._db[poll_id]
 
+    def get_summaries(self):
+        with self._db_lock:
+            results = []
+            for (k, v) in self._db.items():
+                results.append({
+                    'title': v.config['title'],
+                    'limit_date': v.config['limit_date'],
+                    'id': k
+                })
+            return sorted(results, key=lambda poll: poll['limit_date'])
+
     def load(self, filename):
         with open(filename, 'rb') as f:
             d = pickle.load(f)
