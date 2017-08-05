@@ -253,5 +253,5 @@ var equalizeWidth = function(poll) {
 }
 
 $( document ).ready(function() {
-    $( 'footer' ).html( createFooterHtml() );
+    $( 'footer' ).html( createFooterHtml() ).hide();
 });
