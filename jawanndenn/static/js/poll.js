@@ -1,12 +1,18 @@
 /* Copyright (C) 2016 Sebastian Pipping <sebastian@pipping.org>
 ** Licensed under GNU GPL v3 or later
 */
+var VOTED_YES = 1;
+var VOTED_NO = 0;
+var VOTED_DUNNO = 2;
+
 var VOTED_YES_CLASS = 'votedYes';
 var VOTED_NO_CLASS = 'votedNo';
+var VOTED_DUNNO_CLASS = 'votedDunno';
 var YET_TO_VOTE_CLASS = 'yetToVote';
 
 var _UNICODE_HEAVY_CHECK_MARK = '\u2714';
 var _UNICODE_HEAVY_BALLOT_X = '\u2718';
+var _UNICODE_BLACK_QUESTION_MARK = '\u2753';
 
 var Mode = {
     PREVIEW: true,
@@ -14,12 +20,18 @@ var Mode = {
 };
 
 // also used by setup.js
-var addRemoveGoodBad = function(selector, goodClass, badClass, good) {
-    if (good) {
+var addRemoveGoodBad = function(selector, goodClass, midClass, badClass, choice) {
+    if (choice == VOTED_YES) {
         selector.addClass( goodClass );
+        selector.removeClass( midClass );
+        selector.removeClass( badClass );
+    } else if (choice == VOTED_DUNNO) {
+        selector.addClass( midClass );
+        selector.removeClass( goodClass );
         selector.removeClass( badClass );
     } else {
         selector.addClass( badClass );
+        selector.removeClass( midClass );
         selector.removeClass( goodClass );
     }
 };
@@ -57,11 +69,14 @@ var _addExistingVoteRows = function(table, options, votes) {
                 }) ).child( person );
         $.each( options, function( j, option ) {
             var tdClass = 'vote';
-            if (votes[j]) {
+            if (votes[j] == VOTED_YES) {
                 votesPerOption[j] = (votesPerOption[j] + 1);
 
                 tdClass += ' ' + VOTED_YES_CLASS;
                 spanBody = _UNICODE_HEAVY_CHECK_MARK;
+            } else if (votes[j] == VOTED_DUNNO) {
+                tdClass += ' ' + VOTED_DUNNO_CLASS;
+                spanBody = _UNICODE_BLACK_QUESTION_MARK;
             } else {
                 tdClass += ' ' + VOTED_NO_CLASS;
                 spanBody = _UNICODE_HEAVY_BALLOT_X;
@@ -100,7 +115,6 @@ var _addCurrentPersonRow = function(table, options, previewMode) {
                     type: 'checkbox',
                     id: 'option' + j,
                     name: 'option' + j,
-                    class: 'filled-in',
                     onclick: 'onClickCheckBox(this);'
                 });
         var td = tr.child( tag('td', {
@@ -177,7 +191,11 @@ var syncSaveButton = function() {
 };
 
 var onClickCheckBox = function(checkbox) {
-    var diff = checkbox.checked ? +1 : -1;
+    if (checkbox.readOnly) checkbox.checked=checkbox.readOnly=false;
+    else if (!checkbox.checked) checkbox.readOnly=checkbox.indeterminate=true;
+
+
+    var diff = checkbox.checked ? +1 : checkbox.readOnly ? -1 : 0;
     var sumTdId = checkbox.id.replace( /^option/, 'sum' );
     var sumTd = $( '#pollTable tr td#' + sumTdId );
     var oldSum = parseInt(sumTd.html());
@@ -196,7 +214,7 @@ var onClickCheckBox = function(checkbox) {
     var optionTd = $( '#pollTable tr td#' + optionTdId );
     optionTd.removeClass( YET_TO_VOTE_CLASS );
     addRemoveGoodBad( optionTd, VOTED_YES_CLASS, VOTED_NO_CLASS,
-            checkbox.checked );
+            checkbox.checked ? VOTED_YES : checkbox.indeterminate ? VOTED_DUNNO : VOTED_NO);
 };
 
 var onChangeVoterName = function(inputElem) {

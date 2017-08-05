@@ -164,6 +164,9 @@ td.person {
 .votedNo {
     background-color: #fdd;
 }
+.votedDunno {
+    background-color: #fe8;
+}
 .yetToVote {
     background-color: #dfdfdf;
 }

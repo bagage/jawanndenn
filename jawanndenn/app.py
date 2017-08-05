@@ -76,8 +76,10 @@ def _data(poll_id):
 def _vote(poll_id):
     voterName = bottle.request.forms['voterName']
     poll = db.get(poll_id)
-    votes = [bottle.request.forms.get('option%d' % i) == 'on'
-            for i in xrange(len(poll.options))]
+    d = {"on": 1, "on-indeterminate": 2}
+    votes = [d.get(bottle.request.forms.get('option%d' % i), 0)
+             for i in xrange(len(poll.options))]
+
     poll.vote(voterName, votes)
 
     bottle.redirect('/poll/%s' % poll_id)

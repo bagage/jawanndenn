@@ -24,7 +24,7 @@ var createExampleVotes = function(config) {
     $.each( config.people, function( i, person ) {
         var votes = [];
         $.each( config.options, function() {
-            votes.push( Math.random() > 0.5 );
+            votes.push( Math.floor(Math.random() * 3));
         });
         exampleVotes.push( [person, votes] );
     });
@@ -130,7 +130,7 @@ var sync = function() {
 
     if (wellformed != prevWellformed) {
         addRemoveGoodBad( $( "#config" ),
-                'wellformed', 'malformed', wellformed );
+                'wellformed', 'wellformed', 'malformed', wellformed );
         enableButton( $('#createButton'), wellformed );
         prevWellformed = wellformed;
     }
