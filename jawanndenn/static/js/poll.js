@@ -55,12 +55,6 @@ var _addExistingVoteRows = function(table, options, votes) {
     $.each( votes, function( i, personVotes ) {
         var person = personVotes[0];
 
-        mail_regex = /^(.*?) <(.*)>$/;
-        if ((match = mail_regex.exec(person)) != null) {
-            person = match[1];
-            email = match[2];
-        }
-
         var votes = personVotes[1];
 
         var tr = table.child( tag('tr') );

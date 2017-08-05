@@ -22,6 +22,11 @@ var exampleVotesCache = {};
 var createExampleVotes = function(config) {
     var exampleVotes = [];
     $.each( config.people, function( i, person ) {
+        mail_regex = /^(.*?) <(.*)>$/;
+        if ((match = mail_regex.exec(person)) != null) {
+            person = match[1];
+        }
+
         var votes = [];
         $.each( config.options, function() {
             votes.push( Math.floor(Math.random() * 3));

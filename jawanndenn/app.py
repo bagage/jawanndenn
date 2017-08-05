@@ -17,13 +17,12 @@ _log = logging.getLogger(__name__)
 
 
 STATIC_HOME_LOCAL = os.path.abspath(os.path.normpath(
-        os.path.join(os.path.dirname(__file__), 'static')
-            if os.path.exists(os.path.join(os.path.dirname(__file__),
-                    '..', 'setup.py')) else
-            pkg_resources.resource_filename(APP_NAME, 'static')
-        ))
+    os.path.join(os.path.dirname(__file__), 'static')
+    if os.path.exists(os.path.join(os.path.dirname(__file__),
+                                   '..', 'setup.py')) else
+    pkg_resources.resource_filename(APP_NAME, 'static')
+))
 _STATIC_HOME_REMOTE = '/static'
-
 
 db = PollDatabase()
 
@@ -35,10 +34,10 @@ def _to_json(e):
 @bottle.get('/static/<path:path>')
 def _static(path):
     content_type = {
-                'css': 'text/css',
-                'js': 'application/javascript',
-                'xhtml': 'application/xhtml+xml',
-            }[path.split('.')[-1]]
+        'css': 'text/css',
+        'js': 'application/javascript',
+        'xhtml': 'application/xhtml+xml',
+    }[path.split('.')[-1]]
     bottle.response.content_type = content_type
     return bottle.static_file(path, root=STATIC_HOME_LOCAL)
 
@@ -61,6 +60,18 @@ def _poll(poll_id):
     db.get(poll_id)
     bottle.response.content_type = 'application/xhtml+xml'
     return bottle.static_file('html/poll.xhtml', root=STATIC_HOME_LOCAL)
+
+
+@bottle.get('/reminder/<poll_id>')
+def _reminder(poll_id):
+    poll = db.get(poll_id)
+    voters = [v[0] for v in poll.votes]
+    people = [p[:p.index("<")-1] for p in poll.config['people'] if '<' in p]
+    missings = [p for p in people if p not in voters]
+    return _to_json({
+        'config': poll.config,
+        'people': missings
+    })
 
 
 @bottle.get('/data/<poll_id>')
@@ -91,11 +102,11 @@ def run_server(options):
 
     try:
         bottle.run(
-                host=options.host,
-                port=options.port,
-                server=options.server,
-                )
+            host=options.host,
+            port=options.port,
+            server=options.server,
+        )
     except ImportError:
         _log.error('WSGI server "%s" does not seem to be available.'
-                % options.server)
+                   % options.server)
         sys.exit(2)
