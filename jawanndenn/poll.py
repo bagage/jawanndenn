@@ -22,6 +22,7 @@ _MAX_VOTERS_PER_POLL = DEFAULT_MAX_VOTER_PER_POLL
 
 _KEY_OPTIONS = 'options'
 _KEY_TITLE = 'title'
+_KEY_LIMIT_DATE = 'limit_date'
 _KEY_DESCRIPTION = 'description'
 _KEY_EQUAL_WIDTH = 'equal_width'
 _KEY_PEOPLE = 'people'
@@ -99,6 +100,7 @@ class _Poll(object):
             _KEY_EQUAL_WIDTH: bool(config.get(_KEY_EQUAL_WIDTH, False)),
             _KEY_TITLE: safe_html(config[_KEY_TITLE]),
             _KEY_DESCRIPTION: safe_html(config[_KEY_DESCRIPTION]),
+            _KEY_LIMIT_DATE: config[_KEY_LIMIT_DATE],
             _KEY_OPTIONS: map(safe_html, config[_KEY_OPTIONS]),
             _KEY_PEOPLE: config[_KEY_PEOPLE],
         }
