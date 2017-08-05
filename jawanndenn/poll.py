@@ -22,6 +22,7 @@ _MAX_VOTERS_PER_POLL = DEFAULT_MAX_VOTER_PER_POLL
 
 _KEY_OPTIONS = 'options'
 _KEY_TITLE = 'title'
+_KEY_DESCRIPTION = 'description'
 _KEY_EQUAL_WIDTH = 'equal_width'
 _KEY_PEOPLE = 'people'
 
@@ -47,6 +48,7 @@ def apply_limits(polls, votes_per_poll):
 
 
 class _Poll(object):
+
     def __init__(self):
         # Version 1
         self.config = {}
@@ -83,7 +85,7 @@ class _Poll(object):
 
         if self._version != initial_version:
             _log.debug('Upgraded poll from version %d to version %d'
-                    % (initial_version, self._version))
+                       % (initial_version, self._version))
 
     @staticmethod
     def from_config(config):
@@ -96,6 +98,7 @@ class _Poll(object):
         poll.config = {
             _KEY_EQUAL_WIDTH: bool(config.get(_KEY_EQUAL_WIDTH, False)),
             _KEY_TITLE: safe_html(config[_KEY_TITLE]),
+            _KEY_DESCRIPTION: safe_html(config[_KEY_DESCRIPTION]),
             _KEY_OPTIONS: map(safe_html, config[_KEY_OPTIONS]),
             _KEY_PEOPLE: config[_KEY_PEOPLE],
         }
@@ -115,6 +118,7 @@ class _Poll(object):
 
 
 class PollDatabase(object):
+
     def __init__(self):
         self._db = {}
         self._db_lock = Lock()
@@ -164,11 +168,11 @@ class PollDatabase(object):
             }
 
             fd, tempfilename = tempfile.mkstemp(
-                    dir=os.path.dirname(filename),
-                    prefix='%s-tmp' % os.path.basename(
-                            filename.replace('.pickle', '')),
-                    suffix='.pickle',
-                    )
+                dir=os.path.dirname(filename),
+                prefix='%s-tmp' % os.path.basename(
+                    filename.replace('.pickle', '')),
+                suffix='.pickle',
+            )
 
             with os.fdopen(fd, 'w') as f:
                 pickle.dump(d, f, _PICKLE_PROTOCOL_VERSION)

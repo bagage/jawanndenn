@@ -159,6 +159,9 @@ var createPollHtml = function(config, votes, previewMode) {
     div.child( tag('h2', {
                 class: 'question'
             }) ).child( config.title );
+    div.child( tag('h6', {
+                class: 'question'
+            }) ).child( config.description );
 
     var form = div.child( tag('form', {
                 id: 'pollForm',

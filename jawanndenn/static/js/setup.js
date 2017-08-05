@@ -45,6 +45,7 @@ var getExampleVotesCached = function(config) {
 var exampleConfigJson = JSON.stringify( {
         equal_width: false,
         title: 'Which fruit do *you* like?',
+        description: 'A fruit is the **ripened ovary** of a *flowering plant*. You may eat them or not. For a full description, you may search for it.',
         options: ['Apple', 'Banana', 'Orange', 'Papaya'],
         people: ['Joe <joe@yopmail.com>', 'Lisa <lisa@yopmail.com>', 'Monica <monica@yopmail.com>', 'Astrid <astrid@yopmail.com>']
         }, null, '  ' );
@@ -109,6 +110,7 @@ var processConfig = function(config) {
     return {
         equal_width: !!config.equal_width,
         title: textToSafeHtml( config.title ),
+        description: textToSafeHtml( config.description ),
         options: $.map( config.options, textToSafeHtml ),
         people: config.people
     };
