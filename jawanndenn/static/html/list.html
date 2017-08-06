@@ -1,22 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
 <!--
 Copyright (C) 2016 Sebastian Pipping <sebastian@pipping.org>
 Licensed under GNU GPL v3 or later
 -->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Liste des événements</title>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.4.1/packaged/jquery.noty.packaged.min.js" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.4.1/packaged/jquery.noty.packaged.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js" />
+        <script type="text/javascript" src="../static/js/html.js"></script>
+        <script type="text/javascript" src="../static/js/poll.js"></script>
 
-        <script type="text/javascript" src="../static/js/html.js" />
-        <script type="text/javascript" src="../static/js/poll.js" />
-        <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
         <script type="text/javascript">
             function createListHtml(polls) {
                 var div = tag('div', {
@@ -43,11 +40,14 @@ Licensed under GNU GPL v3 or later
                 });
             });
         </script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
+        <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
     </head>
     <body>
         <div id='live'>
-            <div id='list' />
+            <div id='list'></div>
         </div>
-        <footer />
+        <footer></footer>
     </body>
 </html>

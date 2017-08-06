@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
 <!--
 Copyright (C) 2016 Sebastian Pipping <sebastian@pipping.org>
 Licensed under GNU GPL v3 or later
 -->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <title>jawanndenn: Create a new poll</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>jawanndenn: Create a new poll</title>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.4.1/packaged/jquery.noty.packaged.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+
+        <script type="text/javascript" src="../static/js/html.js"></script>
+        <script type="text/javascript" src="../static/js/poll.js"></script>
+
+        <script type="text/javascript" src="../static/js/setup.js" ></script>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js" />
-
-        <script type="text/javascript" src="../static/js/html.js" />
-        <script type="text/javascript" src="../static/js/poll.js" />
-        <script type="text/javascript" src="../static/js/setup.js" />
         <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
     </head>
     <body>
         <div id='stage'>
             <div id='preview'>
-                <div id='poll' />
+                <div id='poll'></div>
             </div>
             <div id='setup'>
                 <div class="card-panel">
@@ -36,6 +37,6 @@ Licensed under GNU GPL v3 or later
                 </div>
             </div>
         </div>
-        <footer />
+        <footer></footer>
     </body>
 </html>

@@ -35,7 +35,7 @@ def _static(path):
     content_type = {
         'css': 'text/css',
         'js': 'application/javascript',
-        'xhtml': 'application/xhtml+xml',
+        'html': 'text/html',
     }[path.split('.')[-1]]
     bottle.response.content_type = content_type
     return bottle.static_file(path, root=STATIC_HOME_LOCAL)
@@ -43,14 +43,12 @@ def _static(path):
 
 @bottle.get('/')
 def _index():
-    bottle.response.content_type = 'application/xhtml+xml'
-    return bottle.static_file('html/setup.xhtml', root=STATIC_HOME_LOCAL)
+    return bottle.static_file('html/setup.html', root=STATIC_HOME_LOCAL)
 
 
 @bottle.get('/list')
 def _list():
-    bottle.response.content_type = 'application/xhtml+xml'
-    return bottle.static_file('html/list.xhtml', root=STATIC_HOME_LOCAL)
+    return bottle.static_file('html/list.html', root=STATIC_HOME_LOCAL)
 
 
 @bottle.post('/create')
@@ -70,8 +68,7 @@ def _polls():
 @bottle.get('/poll/<poll_id>')
 def _poll(poll_id):
     db.get(poll_id)
-    bottle.response.content_type = 'application/xhtml+xml'
-    return bottle.static_file('html/poll.xhtml', root=STATIC_HOME_LOCAL)
+    return bottle.static_file('html/poll.html', root=STATIC_HOME_LOCAL)
 
 
 @bottle.get('/reminder/<poll_id>')
