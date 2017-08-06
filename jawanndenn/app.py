@@ -123,6 +123,7 @@ def run_server(options):
             host=options.host,
             port=options.port,
             server=options.server,
+            reloader=options.debug
         )
     except ImportError:
         _log.error('WSGI server "%s" does not seem to be available.'
