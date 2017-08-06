@@ -208,7 +208,8 @@ var enableButton = function(selector, enabled) {
 };
 
 var syncSaveButton = function() {
-    var good = ($( '#voterName' ).val().length > 0);
+    var name = $( '#voterName' ).val();
+    var good = (name.length > 0) && !$( "td.person").filter(function() { return $(this).text().toLowerCase() === name.toLowerCase() })
     var saveButton = $( '#submitVote' );
     enableButton(saveButton, good);
 };

@@ -77,9 +77,10 @@ def _poll(poll_id):
 @bottle.get('/reminder/<poll_id>')
 def _reminder(poll_id):
     poll = db.get(poll_id)
-    voters = [v[0] for v in poll.votes]
-    people = [p[:p.index("<")-1] for p in poll.config['people'] if '<' in p]
-    missings = [p for p in people if p not in voters]
+    voters = [v[0].lower() for v in poll.votes]
+    people = [p[:p.index("<")-1]
+              for p in poll.config['people'] if '<' in p]
+    missings = [p for p in people if p.lower() not in voters]
     return _to_json({
         'config': poll.config,
         'people': missings
@@ -99,6 +100,11 @@ def _data(poll_id):
 def _vote(poll_id):
     voterName = bottle.request.forms['voterName']
     poll = db.get(poll_id)
+
+    if voterName.lower() in [x[0].lower() for x in poll.votes]:
+        bottle.response.status = 400
+        return "This name is already taken"
+
     d = {"on": 1, "on-indeterminate": 2}
     votes = [d.get(bottle.request.forms.get('option%d' % i), 0)
              for i in xrange(len(poll.options))]
