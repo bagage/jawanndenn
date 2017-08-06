@@ -19,12 +19,18 @@ Licensed under GNU GPL v3 or later
                 var div = tag('div', {
                     class: 'collection'
                 });
-                $.each( polls, function( j, poll ) {
-                    div.child( tag('a', {
+                var now = new Date()
+                $.each( polls.reverse(), function( j, poll ) {
+                    var limit_date = formattedDate(poll.limit_date);
+                    var item = tag('a', {
                         href: "/poll/" + poll.id,
                         class: "collection-item",
-                    })).child(formattedDate(poll.limit_date) + " - " + poll.title);
-
+                    })
+                    item.child(limit_date + " - " + poll.title);
+                    if (now > new Date(poll.limit_date)) {
+                        item.attr.class += " datePast";
+                    }
+                    div.child(item);
                 });
                 return toHtml( div );
             }

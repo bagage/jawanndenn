@@ -171,6 +171,10 @@ td.person {
     background-color: #dfdfdf;
 }
 
+.datePast {
+    opacity: 0.5
+}
+
 [type="checkbox"]+label {
     display: inline-block !important;
     margin-top: 0.85em;
