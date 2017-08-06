@@ -36,6 +36,17 @@ var addRemoveGoodBad = function(selector, goodClass, midClass, badClass, choice)
     }
 };
 
+var getQueryVariable = function(variable) {
+   var query = window.location.search.substring(1);
+   var vars = query.split("&");
+   for (var i=0;i<vars.length;i++) {
+       var pair = vars[i].split("=");
+       if(pair[0] == variable){return pair[1];}
+   }
+   return(false);
+}
+
+
 var _addHeaderRow = function(table, options) {
     var tr = table.child( tag('tr') );
     tr.child( tag('td') );
@@ -88,13 +99,17 @@ var _addExistingVoteRows = function(table, options, votes) {
 
 var _addCurrentPersonRow = function(table, options, previewMode) {
     var tr = table.child( tag('tr') );
+    var voterName = getQueryVariable("voterName") || null
     var inputAttr = {
                 id: 'voterName',
                 name: 'voterName',
                 type: 'text',
                 class: 'person',
-                placeholder: 'Your name'
+                placeholder: 'Your name',
             };
+    if (voterName != null) {
+        inputAttr.value = voterName;
+    }
     if (! previewMode) {
         inputAttr.autofocus = 'autofocus';
         // NOTE: onchange fires "too late"
@@ -120,14 +135,17 @@ var _addCurrentPersonRow = function(table, options, previewMode) {
                 'for': 'option' + j
                 }));
     });
-    var toolsTd = tr.child( tag('td') );
-    toolsTd.child( tag('input', {
+    var input = tag('input', {
                 id: 'submitVote',
                 type: 'submit',
-                disabled: 'disabled',
                 class: 'waves-effect waves-light btn',
                 value: 'Save',
-            }));
+            })
+    if (previewMode || voterName == null) {
+        input.attr.disabled = 'disabled'
+    }
+    var toolsTd = tr.child( tag('td') );
+    toolsTd.child(input);
 };
 
 var _addSummaryRow = function(table, options, votesPerOption) {
