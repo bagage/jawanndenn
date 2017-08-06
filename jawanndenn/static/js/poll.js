@@ -209,7 +209,7 @@ var enableButton = function(selector, enabled) {
 
 var syncSaveButton = function() {
     var name = $( '#voterName' ).val();
-    var good = (name.length > 0) && !$( "td.person").filter(function() { return $(this).text().toLowerCase() === name.toLowerCase() })
+    var good = (name.length > 0) && $( "td.person").filter(function() { return $(this).text().toLowerCase() === name.toLowerCase() }).length == 0
     var saveButton = $( '#submitVote' );
     enableButton(saveButton, good);
 };
