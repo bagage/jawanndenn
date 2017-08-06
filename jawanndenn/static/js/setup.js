@@ -37,14 +37,7 @@ var createExampleVotes = function(config) {
 };
 
 var getExampleVotesCached = function(config) {
-    var key = config.options.length + "-" + config.people.length;
-    if (key in exampleVotesCache) {
-        return exampleVotesCache[key];
-    } else {
-        var exampleVotes = createExampleVotes(config);
-        exampleVotesCache[key] = exampleVotes;
-        return exampleVotes;
-    }
+    return createExampleVotes(config);
 }
 
 var exampleConfigJson = JSON.stringify( {
@@ -55,10 +48,6 @@ var exampleConfigJson = JSON.stringify( {
         options: ['Apple', 'Banana', 'Orange', 'Papaya'],
         people: ['Joe <joe@yopmail.com>', 'Lisa <lisa@yopmail.com>', 'Monica <monica@yopmail.com>', 'Astrid <astrid@yopmail.com>']
         }, null, '  ' );
-
-var resetConfig = function() {
-    $('#config').val( exampleConfigJson );
-};
 
 // Excapes HTML and renders subset of markdown
 var textToSafeHtml = function(text) {
@@ -127,18 +116,22 @@ var prevConfigJson = '';
 var prevWellformed = null;
 
 var sync = function() {
-    var configJson = $( '#config' ).val();
-
     var wellformed = true;
-    var config = null;
+    var config = {};
     try {
-        config = jQuery.parseJSON( configJson );
+        config.title = $('#title').val()
+        config.description = $('#description').val()
+        config.limit_date = new Date($('#limit_date').val()).toISOString().split('T')[0]
+        config.options = $('#options').val().split(',')
+        config.people = $('#people').val().split(',')
+        $('#config').val(JSON.stringify(config));
     } catch( err ) {
+        config = null
         wellformed = false;
     }
 
     if (wellformed != prevWellformed) {
-        addRemoveGoodBad( $( "#config" ),
+        addRemoveGoodBad( $( ".card-panel" ),
                 'wellformed', 'wellformed', 'malformed', wellformed );
         enableButton( $('#createButton'), wellformed );
         prevWellformed = wellformed;
@@ -164,7 +157,6 @@ var sync = function() {
 };
 
 $( document ).ready(function() {
-    resetConfig();
     sync();
     setInterval( sync, 500 );
 });

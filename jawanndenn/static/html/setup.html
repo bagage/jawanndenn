@@ -16,6 +16,18 @@ Licensed under GNU GPL v3 or later
 
         <script type="text/javascript" src="../static/js/setup.js" ></script>
 
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                $('.datepicker').pickadate({
+                    selectMonths: true,
+                    selectYears: 15,
+                    today: 'Today',
+                    clear: 'Clear',
+                    close: 'Ok',
+                    closeOnSelect: true
+                  });
+            })
+        </script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
         <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
     </head>
@@ -27,12 +39,38 @@ Licensed under GNU GPL v3 or later
             <div id='setup'>
                 <div class="card-panel">
                     <form id='setupForm' action="/create" method="POST">
-                        <div class="input-field">
-                            <textarea id="config" name="config" class="materialize-textarea monospace-text"></textarea>
-                            <label for="config">Setup (JSON)</label>
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="title" type="text" required="required" placeholder="Which fruit do you like?" />
+                                <label for="title">Title</label>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <textarea id="description" class="materialize-textarea monospace-text" placeholder="A fruit is the **ripened** ovary of a *flowering* plant."></textarea>
+                                <label for="description">Description</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="limit_date" type="text" class="datepicker" placeholder="Click to select!" />
+                                <label for="limit_date">Limit date</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="options" type="text" required="required" placeholder="Apple, Banana, Orange" />
+                                <label for="options">Options (comma separated)</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="people" type="text" required="required" placeholder="Paul &lt;paul@gmail.com&gt;, Marc &lt;marc@gmail.com&gt;" />
+                                <label for="people">Participants (comma separated)</label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="config" name="config" />
                         <button type="submit" id='createButton' onclick="$( '#setupForm' ).submit();" class="waves-effect waves-light btn" disabled="disabled">Create</button>
-                        <button type="button" id='resetButton' onclick="resetConfig();" class="waves-effect waves-light btn-flat">Reset</button>
                     </form>
                 </div>
             </div>
