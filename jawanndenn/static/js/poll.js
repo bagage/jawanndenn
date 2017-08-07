@@ -185,6 +185,11 @@ var createPollHtml = function(config, votes, previewMode) {
     div.child( tag('p', {
                 class: 'question'
             }) ).child( "Date limite d'inscription : " + formattedDate(config.limit_date));
+    if (config.people.length) {
+        div.child( tag('p', {
+                class: 'question'
+            }) ).child( "Nombre de participants attendus : " + config.people.length);
+    }
 
     var form = div.child( tag('form', {
                 id: 'pollForm',
