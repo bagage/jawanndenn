@@ -27,6 +27,10 @@ td.person {
     height: 26px;
 }
 
+.hidden-row {
+    display: none;
+}
+
 .sumNonZero {
     font-weight: bold;
 }

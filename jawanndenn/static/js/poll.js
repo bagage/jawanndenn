@@ -92,6 +92,9 @@ var _addExistingVoteRows = function(table, options, votes) {
                     .child( tag('span') )
                     .child( spanBody );
         });
+        tr.child( tag('td', { onclick: 'onClickEdit(event);' }) )
+                .child(tag('i', { class: "material-icons"})).child("edit") ;
+
         tr.child( tag('td') );
     });
     return votesPerOption;
@@ -209,10 +212,43 @@ var enableButton = function(selector, enabled) {
 
 var syncSaveButton = function() {
     var name = $( '#voterName' ).val();
-    var good = (name.length > 0) && $( "td.person").filter(function() { return $(this).text().toLowerCase() === name.toLowerCase() }).length == 0
+    var good = (name.length > 0)
     var saveButton = $( '#submitVote' );
     enableButton(saveButton, good);
 };
+
+var onClickEdit = function(item) {
+    var row = $(item.target.parentNode.parentNode);
+
+    // remove previous hidden row, if any
+    $(".hidden-row").removeClass();
+
+    // load data
+    $('#voterName').val($(row.children('td.person')[0]).html());
+    $(row.children('td.vote')).each(function(j, a) {
+        var option = $('#option' + j);
+
+        if ($(this).hasClass(VOTED_DUNNO_CLASS)) {
+            option.prop('checked', false);
+            option.prop('indeterminate', true);
+        } else if ($(this).hasClass(VOTED_NO_CLASS)) {
+            option.prop('checked', false);
+            option.prop('indeterminate', false);
+        } else {
+            option.prop('checked', true);
+            option.prop('indeterminate', false);
+        }
+        option.prop('readOnly', option.prop('indeterminate'));
+
+        var optionTd = $( '#pollTable tr td#optionTd' + j );
+        optionTd.removeClass(YET_TO_VOTE_CLASS);
+        addRemoveGoodBad( optionTd, VOTED_YES_CLASS, VOTED_NO_CLASS, VOTED_DUNNO_CLASS,
+                option.prop('checked') ? VOTED_YES : option.prop('indeterminate') ? VOTED_NO : VOTED_DUNNO);
+
+    });
+    row.addClass( 'hidden-row' );
+    syncSaveButton();
+}
 
 var onClickCheckBox = function(checkbox) {
     if (checkbox.readOnly) checkbox.checked=checkbox.readOnly=false;
@@ -237,8 +273,8 @@ var onClickCheckBox = function(checkbox) {
     var optionTdId = checkbox.id.replace( /^option/, 'optionTd' );
     var optionTd = $( '#pollTable tr td#' + optionTdId );
     optionTd.removeClass( YET_TO_VOTE_CLASS );
-    addRemoveGoodBad( optionTd, VOTED_YES_CLASS, VOTED_NO_CLASS,
-            checkbox.checked ? VOTED_YES : checkbox.indeterminate ? VOTED_DUNNO : VOTED_NO);
+    addRemoveGoodBad( optionTd, VOTED_YES_CLASS, VOTED_NO_CLASS, VOTED_DUNNO_CLASS,
+            checkbox.checked ? VOTED_YES : checkbox.indeterminate ? VOTED_NO : VOTED_DUNNO);
 };
 
 var onChangeVoterName = function(inputElem) {

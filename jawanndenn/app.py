@@ -98,10 +98,6 @@ def _vote(poll_id):
     voterName = bottle.request.forms['voterName']
     poll = db.get(poll_id)
 
-    if voterName.lower() in [x[0].lower() for x in poll.votes]:
-        bottle.response.status = 400
-        return "This name is already taken"
-
     d = {"on": 1, "on-indeterminate": 2}
     votes = [d.get(bottle.request.forms.get('option%d' % i), 0)
              for i in xrange(len(poll.options))]

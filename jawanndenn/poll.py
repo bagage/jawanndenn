@@ -116,6 +116,10 @@ class _Poll(object):
                 raise ValueError('Too many votes per poll')
             if len(votes) != len(self.options):
                 raise ValueError('Malformed vote')
+            prevtuple = [(p, v)
+                         for (p, v) in self.votes if p.lower() == person.lower()]
+            if len(prevtuple):
+                self.votes.remove(prevtuple[0])
             self.votes.append((person, votes))
 
 
