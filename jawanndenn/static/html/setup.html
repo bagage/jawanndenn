@@ -18,7 +18,7 @@ Licensed under GNU GPL v3 or later
 
         <script type="text/javascript">
             $( document ).ready(function() {
-                $('.datepicker').pickadate({
+                var input = $('.datepicker').pickadate({
                     selectMonths: true,
                     selectYears: 15,
                     today: 'Today',
@@ -26,6 +26,8 @@ Licensed under GNU GPL v3 or later
                     close: 'Ok',
                     closeOnSelect: true
                   });
+                var picker = input.pickadate('picker')
+                picker.set('select', new Date())
             })
         </script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
