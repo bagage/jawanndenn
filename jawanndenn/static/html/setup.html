@@ -28,6 +28,10 @@ Licensed under GNU GPL v3 or later
                   });
                 var picker = input.pickadate('picker')
                 picker.set('select', new Date())
+
+                $('.chips-placeholder').material_chip({
+                    secondaryPlaceholder: '+New',
+                  });
             })
         </script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css" />
@@ -62,14 +66,16 @@ Licensed under GNU GPL v3 or later
                         </div>
                         <div class="row">
                             <div class="input-field">
-                                <input id="options" type="text" required="required" placeholder="Apple, Banana, Orange" />
-                                <label for="options">Options (comma separated)</label>
-                            </div>
+                              <div id="options" class="chips chips-placeholder"></div>
+                              <label for="options">Options</label>
+                              </div>
                         </div>
                         <div class="row">
                             <div class="input-field">
-                                <input id="people" type="text" required="required" placeholder="Paul &lt;paul@gmail.com&gt;, Marc &lt;marc@gmail.com&gt;" />
-                                <label for="people">Participants (comma separated)</label>
+                              <div id="people" class="chips chips-placeholder"></div>
+
+                                <!-- <input id="people" type="text" required="required" placeholder="Paul &lt;paul@gmail.com&gt;, Marc &lt;marc@gmail.com&gt;" /> -->
+                                <label for="people">Participants</label>
                             </div>
                         </div>
                         <input type="hidden" id="config" name="config" />

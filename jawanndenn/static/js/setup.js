@@ -122,8 +122,11 @@ var sync = function() {
         config.title = $('#title').val()
         config.description = $('#description').val()
         config.limit_date = new Date($('#limit_date').val()).toISOString().split('T')[0]
-        config.options = $('#options').val().split(',')
-        config.people = $('#people').val().split(',')
+        config.options = []
+        $.each($('#options').material_chip('data'), function(i, e) { config.options.push(e.tag) })
+        config.people = []
+        $.each($('#people').material_chip('data'), function(i, e) { config.people.push(e.tag) })
+
         $('#config').val(JSON.stringify(config));
     } catch( err ) {
         config = null
