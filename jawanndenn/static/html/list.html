@@ -19,7 +19,7 @@ Licensed under GNU GPL v3 or later
                 var div = tag('div', {
                     class: 'collection'
                 });
-                var now = new Date()
+                var now = new Date().getTime()
                 $.each( polls.reverse(), function( j, poll ) {
                     var limit_date = formattedDate(poll.limit_date);
                     var item = tag('a', {
@@ -27,7 +27,7 @@ Licensed under GNU GPL v3 or later
                         class: "collection-item",
                     })
                     item.child(limit_date + " - " + poll.title);
-                    if (now > new Date(poll.limit_date)) {
+                    if (now > 86400*1000 + new Date(poll.limit_date).getTime()) {
                         item.attr.class += " datePast";
                     }
                     div.child(item);

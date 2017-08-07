@@ -121,7 +121,7 @@ var sync = function() {
     try {
         config.title = $('#title').val()
         config.description = $('#description').val()
-        config.limit_date = new Date($('#limit_date').val()).toISOString().split('T')[0]
+        config.limit_date = new Date(new Date($('#limit_date').val()).getTime() + 86400*1000).toISOString().split('T')[0]
         config.options = []
         $.each($('#options').material_chip('data'), function(i, e) { config.options.push(e.tag) })
         config.people = []
