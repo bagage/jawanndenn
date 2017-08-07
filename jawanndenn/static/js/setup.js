@@ -128,6 +128,10 @@ var sync = function() {
         $.each($('#people').material_chip('data'), function(i, e) { config.people.push(e.tag) })
 
         $('#config').val(JSON.stringify(config));
+
+
+        if (config.title.length == 0) wellformed = false;
+        if (config.options.length == 0) wellformed = false;
     } catch( err ) {
         config = null
         wellformed = false;
