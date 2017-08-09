@@ -1,7 +1,7 @@
 # Copyright (C) 2016 Sebastian Pipping <sebastian@pipping.org>
 # Licensed under GNU Affero GPL v3 or later
 
-import cPickle as pickle
+import _pickle as pickle
 import datetime
 import hashlib
 import logging
@@ -38,7 +38,7 @@ _log = logging.getLogger(__name__)
 
 
 def _get_random_sha256():
-    return hashlib.sha256(os.urandom(256 / 8)).hexdigest()
+    return hashlib.sha256(os.urandom(int(256 / 8))).hexdigest()
 
 
 def apply_limits(polls, votes_per_poll):
@@ -101,9 +101,11 @@ class _Poll(object):
             _KEY_TITLE: safe_html(config[_KEY_TITLE]),
             _KEY_DESCRIPTION: safe_html(config[_KEY_DESCRIPTION]),
             _KEY_LIMIT_DATE: config[_KEY_LIMIT_DATE],
-            _KEY_OPTIONS: map(safe_html, config[_KEY_OPTIONS]),
+            _KEY_OPTIONS: [],
             _KEY_PEOPLE: config[_KEY_PEOPLE],
         }
+        poll.config[_KEY_OPTIONS][:] = (safe_html(x)
+                                        for x in config[_KEY_OPTIONS])
         return poll
 
     @property
@@ -125,10 +127,11 @@ class _Poll(object):
 
 class PollDatabase(object):
 
-    def __init__(self):
+    def __init__(self, filename):
         self._db = {}
         self._db_lock = Lock()
         self._version = _PICKLE_POLL_DATABASE_VERSION
+        self._filename = filename
 
     def __getstate__(self):
         d = self.__dict__.copy()
@@ -138,6 +141,7 @@ class PollDatabase(object):
     def __setstate__(self, d):
         self.__dict__.update(d)
         self._db_lock = Lock()
+        self.save()
 
     def add(self, config):
         poll = _Poll.from_config(config)
@@ -149,6 +153,7 @@ class PollDatabase(object):
             if poll_id in self._db:
                 raise ValueError('ID collision: %s' % poll_id)
             self._db[poll_id] = poll
+        self.save()
 
         return poll_id
 
@@ -167,8 +172,8 @@ class PollDatabase(object):
                 })
             return sorted(results, key=lambda poll: poll['limit_date'])
 
-    def load(self, filename):
-        with open(filename, 'rb') as f:
+    def load(self):
+        with open(self._filename, 'rb') as f:
             d = pickle.load(f)
 
         if d['version'] != _PICKLE_CONTENT_VERSION:
@@ -177,7 +182,7 @@ class PollDatabase(object):
         self.__dict__.update(d['data'].__dict__)
         _log.info('%d polls loaded.' % len(self._db))
 
-    def save(self, filename):
+    def save(self):
         with self._db_lock:
             d = {
                 'version': _PICKLE_CONTENT_VERSION,
@@ -185,15 +190,15 @@ class PollDatabase(object):
             }
 
             fd, tempfilename = tempfile.mkstemp(
-                dir=os.path.dirname(filename),
+                dir=os.path.dirname(self._filename),
                 prefix='%s-tmp' % os.path.basename(
-                    filename.replace('.pickle', '')),
+                    self._filename.replace('.pickle', '')),
                 suffix='.pickle',
             )
 
-            with os.fdopen(fd, 'w') as f:
+            with os.fdopen(fd, 'wb') as f:
                 pickle.dump(d, f, _PICKLE_PROTOCOL_VERSION)
 
-            shutil.move(tempfilename, filename)
+            shutil.move(tempfilename, self._filename)
 
             _log.info('%d polls saved.' % len(self._db))

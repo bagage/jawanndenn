@@ -1,0 +1,3 @@
+A new poll: '{{title}}' has been created:
+
+{{url}}

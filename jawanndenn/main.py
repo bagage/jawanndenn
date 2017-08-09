@@ -8,31 +8,7 @@ import os
 import sys
 
 from jawanndenn.poll import (apply_limits,
-        DEFAULT_MAX_POLLS, DEFAULT_MAX_VOTER_PER_POLL)
-
-
-_BOTTLE_BACKENDS = (
-    'cgi',
-    'flup',
-    'gae',
-    'wsgiref',
-    'cherrypy',
-    'paste',
-    'rocket',
-    'waitress',
-    'gunicorn',
-    'eventlet',
-    'gevent',
-    'diesel',
-    'fapws3',
-    'tornado',
-    'twisted',
-    'meinheld',
-    'bjoern',
-    'auto',
-)
-
-_DEFAULT_BACKEND = 'paste'
+                             DEFAULT_MAX_POLLS, DEFAULT_MAX_VOTER_PER_POLL)
 
 _log = logging.getLogger(__name__)
 
@@ -54,27 +30,19 @@ def _require_hash_randomization():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true',
-            help='Enable debug mode (default: disabled)')
+                        help='Enable debug mode (default: disabled)')
     parser.add_argument('--host', default='127.0.0.1', metavar='HOST',
-            help='Hostname or IP address to listen at (default: %(default)s)')
+                        help='Hostname or IP address to listen at (default: %(default)s)')
     parser.add_argument('--port', default=8080, type=int, metavar='PORT',
-            help='Port to listen at (default: %(default)s)')
-    parser.add_argument('--server', default='paste', metavar='BACKEND',
-            help='bottle backend to use (default: %%(default)s)'
-                '; as of this writing bottle supports: %s. '
-                'For the most current list, please check the documentation '
-                'of bottle.'
-                % ', '.join(sorted(b for b in _BOTTLE_BACKENDS
-                                   if b != _DEFAULT_BACKEND))
-                )
+                        help='Port to listen at (default: %(default)s)')
 
     limits = parser.add_argument_group('limit configuration')
     limits.add_argument('--max-polls', type=int, metavar='COUNT',
-            default=DEFAULT_MAX_POLLS,
-            help='Maximum number of polls total (default: %(default)s)')
+                        default=DEFAULT_MAX_POLLS,
+                        help='Maximum number of polls total (default: %(default)s)')
     limits.add_argument('--max-votes-per-poll', type=int, metavar='COUNT',
-            default=DEFAULT_MAX_VOTER_PER_POLL,
-            help='Maximum number of votes per poll (default: %(default)s)')
+                        default=DEFAULT_MAX_VOTER_PER_POLL,
+                        help='Maximum number of votes per poll (default: %(default)s)')
 
     options = parser.parse_args()
 
@@ -83,14 +51,12 @@ def main():
     _require_hash_randomization()
 
     # Heavy imports are down here to keep --help fast
-    from jawanndenn.app import db, run_server, STATIC_HOME_LOCAL
+    from jawanndenn.app import db, run_server
 
     apply_limits(
         polls=options.max_polls,
         votes_per_poll=options.max_votes_per_poll,
     )
-
-    _log.debug('Serving static files from "%s"' % STATIC_HOME_LOCAL)
 
     filename = os.path.expanduser('~/jawanndenn.pickle')
 

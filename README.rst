@@ -8,8 +8,8 @@ What is jawanndenn?
 polls, a libre alternative to Doodle. It is written in Python and
 JavaScript using
 
--  `bottle`_ with `Paste`_ for a default backend
--  `jQuery`_ 
+-  `flask`_
+-  `jQuery`_
 -  `jQuery noty`_
 -  `Materialize`_ Material Design CSS/JS
 
@@ -43,7 +43,7 @@ Deployment with Apache mod\_wsgi
 To use *jawanndenn* with ``mod_wsgi``, there is file
 ``jawanndenn/app.wsgi`` For how to integrate ``jawanndenn/app.wsgi``
 with the Apache configuration, please check the `the related
-documentation of bottle`_.
+documentation of flask`_.
 
 Feel free to `file a support ticket`_ or `drop me a mail`_, if you
 cannot get it to work.
@@ -80,12 +80,6 @@ Currently supported arguments are:
       --host HOST           Hostname or IP address to listen at (default:
                             127.0.0.1)
       --port PORT           Port to listen at (default: 8080)
-      --server BACKEND      bottle backend to use (default: paste); as of this
-                            writing bottle supports: auto, bjoern, cgi, cherrypy,
-                            diesel, eventlet, fapws3, flup, gae, gevent, gunicorn,
-                            meinheld, rocket, tornado, twisted, waitress, wsgiref.
-                            For the most current list, please check the
-                            documentation of bottle.
 
     limit configuration:
       --max-polls COUNT     Maximum number of polls total (default: 100)
@@ -121,8 +115,7 @@ Non-goals
 -  Use of heavy frameworks: building blocks only
 -  Read availability from calendars
 
-.. _bottle: http://bottlepy.org/docs/dev/
-.. _Paste: http://pythonpaste.org/
+.. _flask: http://flask.pocoo.org/
 .. _jQuery: http://jquery.com/
 .. _jQuery noty: http://ned.im/noty/#/about
 .. _Materialize: http://materializecss.com/
@@ -132,7 +125,7 @@ Non-goals
 .. _GNU GPL license: https://www.gnu.org/licenses/gpl.html
 .. _report bugs: https://github.com/hartwork/jawanndenn/issues
 .. _like: mailto:sebastian@pipping.org
-.. _the related documentation of bottle: https://bottlepy.org/docs/dev/deployment.html#apache-mod-wsgi
+.. _the related documentation of flask: http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/
 .. _file a support ticket: https://github.com/hartwork/jawanndenn/issues/new
 .. _drop me a mail: mailto:sebastian@pipping.org
 .. _libre alternatives: http://alternativeto.net/software/doodle/?license=opensource
