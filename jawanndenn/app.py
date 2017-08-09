@@ -54,6 +54,16 @@ def list():
 def create():
     config = json.loads(flask.request.form['config'])
     poll_id = db.add(config)
+    send_email("[{}] New poll created".format(APP_NAME),
+               MAIL_ADMINISTRATORS[0],
+               MAIL_ADMINISTRATORS,
+               render_template("email/new_poll.txt", url=flask.url_for(
+                   'poll', poll_id=poll_id, _external=True), title=config['title']),
+               render_template("email/new_poll.html",
+                               url=flask.url_for(
+                                   'poll', poll_id=poll_id, _external=True),
+                               title=config['title']))
+
     return flask.redirect(flask.url_for('poll', poll_id=poll_id))
 
 
